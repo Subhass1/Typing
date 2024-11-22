@@ -16,18 +16,21 @@
 
     <style>
         body {
+            width: 100%;
             margin: 0;
             padding: 0;
             background-color: #003049;
             font-family: "Roboto", sans-serif;
+            box-sizing: border-box;
         }
 
         .typing-speed-test {
+            width: 80%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
+            margin: 0 auto;
             padding-top: 6rem;
         }
 
@@ -38,13 +41,17 @@
         }
 
         .typing-speed-test h3 {
-            font-size: 1.8rem;
-            padding-top: 1.5rem;
+            font-size: 1.1rem;
+            padding: 1.1rem 0 2rem 0;
             color: #fdf0d5;
+            letter-spacing: 1px;
+            word-spacing: 1px;
+            font-weight: 400;
+            text-transform: lowercase;
         }
 
         .typing-speed-test textarea {
-            padding-top: 1rem;
+            /* padding-top: 1rem; */
             border: 12px solid #000;
             border-radius: 1rem;
             background-color: #003049;
@@ -54,9 +61,7 @@
             padding-left: 1rem;
         }
 
-        textarea::placeholder {
-            color: #fdf0d5;
-        }
+        /*   */
 
         .typing-speed-test button {
             width: 8rem;
@@ -85,7 +90,110 @@
     </div>
 
     <script>
+        const sentences = ["The bright sun shone over the tranquil village bringing warmth and happiness to everyone who ventured outside that morning.",
+            "As the clock struck midnight, the mysterious figure disappeared into the shadows, leaving behind only whispers of intrigue.",
+            "She opened the old, dusty book, revealing forgotten secrets that had been hidden for centuries within its fragile pages.",
+            "The travelers ventured through the dense forest, carefully avoiding dangerous traps and following the map's faintly drawn directions to treasure.",
+            "A gentle breeze carried the scent of blooming flowers, reminding everyone that spring had finally arrived after a harsh winter.",
+            "The chef skillfully prepared the exquisite meal, blending flavors and textures to create a dish worthy of a culinary masterpiece.",
+            "During the stormy night, the old lighthouse stood strong, guiding ships safely to shore with its bright, unwavering light.",
+            "The teacher inspired her students to dream big, work hard, and believe in their potential to achieve extraordinary things.",
+            "Beneath the vast expanse of stars, the adventurers made a pact to protect each other no matter the challenges ahead.",
+            "The artist spent countless hours perfecting her painting, ensuring every detail reflected her vision and passion for the craft.",
+            "The little girl danced joyfully in the rain, her laughter echoing through the empty streets, filling hearts with happiness.",
+            "His dedication to the project was unwavering, even when faced with obstacles that seemed impossible to overcome at times.",
+            "The scientist conducted experiments late into the night, determined to uncover the truth behind the mysterious phenomenon baffling researchers.",
+            "A tiny bird chirped happily in its nest, a symbol of resilience and hope amid the chaos of the surrounding world.",
+            "The knight bravely faced the dragon, armed only with his courage and a sword forged by the finest blacksmiths.",
+            "On their way to the mountain summit, the hikers paused to admire the breathtaking view of the valley below them.",
+            "The detective pieced together the clues, uncovering a hidden conspiracy that threatened to unravel the city's delicate balance of peace.",
+            "Music filled the room, soothing the weary travelers who had spent hours navigating the treacherous paths through the wilderness.",
+            "A young inventor unveiled her latest creation, a machine designed to revolutionize communication and bring people closer than ever before.",
+            "Despite the challenges they faced, the team remained united, knowing their combined efforts would lead to ultimate victory.",
+            "The ancient ruins echoed with the whispers of history, each stone telling a story of civilizations long gone but remembered.",
+            "A rainbow appeared after the rainstorm, stretching across the sky, a vivid reminder of nature's beauty and fleeting moments.",
+            "They gathered around the fire, sharing tales of their adventures, each story weaving a tapestry of courage and determination.",
+            "The garden bloomed with vibrant colors, a testament to the gardener's patience and care throughout the changing seasons.",
+            "The little boy watched the kite soar high above the fields, dreaming of a future where anything seemed possible.",
+            "An eagle soared gracefully through the clouds, its piercing gaze scanning the earth below for its next meal.",
+            "The bustling marketplace overflowed with people, vendors calling out their wares while customers haggled for the best deals.",
+            "At the edge of the cliff, they marveled at the endless horizon, where sky and sea became one breathtaking panorama.",
+            "A wise mentor guided his students, teaching them lessons about life, perseverance, and the power of knowledge in every challenge.",
+            "In the quiet library, she discovered a forgotten journal filled with stories, igniting her imagination and thirst for exploration."
 
+        ]
+
+        const text = document.getElementById('text');
+        const typeWords = document.getElementById('myTyping');
+        const btn = document.getElementById('btn');
+
+        let startTime, endTime;
+
+        const playGame = () => {
+            let randomNumber = Math.floor(Math.random() * sentences.length);
+            text.innerText = sentences[randomNumber];
+            let date = new Date();
+            startTime = date.getTime();
+            btn.innerText = "Done";
+        }
+
+        const endPlay = () => {
+            let date = new Date();
+            endTime = date.getTime();
+            let totalTime = ((endTime - startTime) / 1000);
+            console.log(totalTime);
+
+            let totalStr = typeWords.value;
+            let wordCount = wordCounter(totalStr);
+
+            let speed = Math.round((wordCount / totalTime) * 60);
+
+            let finalMsg = "Your typed total at " +speed+ " WPM";
+
+            finalMsg += compareWords(text.innerText,totalStr);
+
+
+            text.innerText = finalMsg;
+        }
+        
+
+        const compareWords = (str1, str2) => {
+            let words1 = str1.split(" ");
+            let words2 = str2.split(" ");
+            let cnt = 0;
+
+            // arrayName then foreach then it will take whole function with value and index no. of that array
+
+            words1.forEach(function (item, index) {
+                if (item == words2[index]) {
+                    cnt++;
+                }
+            })
+
+            let errorWords = (words1.length - cnt);
+            return (cnt + " correct out of " +  words1.length + " words and the total number of error are " + errorWords + " .");
+
+        }
+
+        const wordCounter = (str) => {
+            let response = str.split(" ").length;
+            return response;
+        }
+
+        btn.addEventListener('click', function () {
+            if (this.innerText == 'Start') {
+                typeWords.disabled = false;
+                playGame();
+
+            } else if (this.innerText == "Done") {
+                typeWords.disabled = true;
+                btn.innerText = "Start";
+
+                endPlay();
+            }
+
+
+        })
     </script>
 </body>
 
